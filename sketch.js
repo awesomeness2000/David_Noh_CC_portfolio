@@ -3,12 +3,13 @@ let exposureSlider, contrastSlider;
 let fliptf
 
 function setup() {
-  createCanvas(640, 480);
+  createCanvas(windowWidth, windowHeight);
   textFont('Verdana');
   textStyle(BOLD);
   textSize(20);
 
   cam = createCapture(VIDEO, { flipped: true });
+  cam.size(windowWidth, windowHeight)
   cam.hide();
   pixelDensity(1);
 
