@@ -9,7 +9,7 @@ function setup() {
   textSize(20);
 
   cam = createCapture(VIDEO, { flipped: true });
-  cam.size(windowWidth, windowHeight)
+  cam.size(windowWidth/4, windowHeight/4)
   cam.hide();
   pixelDensity(1);
 
