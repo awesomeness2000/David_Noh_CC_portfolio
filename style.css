@@ -5,3 +5,7 @@ html, body {
 canvas {
   display: block;
 }
+  body {
+    background-color: black;
+    cursor: url('Assets/cursor.png') 8 8,  auto;
+  }

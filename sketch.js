@@ -1,74 +1,48 @@
-let cam;
-let exposureSlider, contrastSlider;
-let fliptf
+let stars = [];
+let numArms = 2; 
+let rotation = 0; 
+let baseRadius = 200;
+let growth = 0;
+let fade = 255;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  textFont('Verdana');
-  textStyle(BOLD);
-  textSize(20);
-
-  cam = createCapture(VIDEO, { flipped: true });
-  cam.size(windowWidth/4, windowHeight/4)
-  cam.hide();
-  pixelDensity(1);
-
-  exposureSlider = createSlider(0, 255, 128);
-  exposureSlider.position(10, 450);
-  exposureSlider.size(600);
-
-  contrastSlider = createSlider(0, 255, 128);
-  contrastSlider.position(10, 550);
-  contrastSlider.size(600);
+  noStroke();
+  generateGalaxy(numArms, baseRadius);
 }
 
 function draw() {
-  background(0);
-  cam.loadPixels();
-  loadPixels();
+  background(0, 40);
+  push();
+  translate(width / 2, height / 2);
+  rotate(rotation);
 
-  if (cam.pixels.length > 0) {
-    for (let y = 0; y < cam.height; y++) {
-      for (let x = 0; x < cam.width; x++) {
-        let index = (x + y * cam.width) * 4;
-
-        let r = cam.pixels[index];
-        let g = cam.pixels[index + 1];
-        let b = cam.pixels[index + 2];
-        let brightness = (r + g + b) / 3;
-
-        let exposure = exposureSlider.value();
-        
-        if (exposure < 128){
-          exposure = map(exposure, 128, 0, 0, -100);
-        }
-        else{
-          exposure = map(exposure, 128, 255, 0, 100);
-        }
-        brightness += exposure;
-
-        let contrast = contrastSlider.value();
-        let factor = map(contrast, 0, 255, 0, 3);
-        brightness = (brightness - 128) * factor + 128;
-
-        if(brightness < 0){ 
-          brightness = 0;
-        }
-        else if (brightness > 255){
-          brightness = 255;
-        }
-
-        pixels[index] = brightness;
-        pixels[index + 1] = brightness;
-        pixels[index + 2] = brightness;
-        pixels[index + 3] = 255;
-      }
-    }
-    updatePixels();
+  for (let s of stars) {
+    fill(red(s.c), green(s.c), blue(s.c), fade);
+    let scale = 1 + growth / baseRadius;
+    ellipse(s.x * scale, s.y * scale, s.size);
   }
 
-  fill(255);
-  text("Exposure", 20, 443);
-  text("Contrast", 20, 543);
+  pop();
+  rotation += 0.02;
+  growth += 1.5;
+  fade -= .8;
+
+  if (fade <= 0) noLoop();
 }
 
+function generateGalaxy(arms, size) {
+  stars = [];
+  let numStars = 800;
+  for (let i = 0; i < numStars; i++) {
+    let angle = i * 0.1;
+    let radius = map(i, 0, numStars, 0, size);
+    let arm = i % arms;
+    let armAngle = (TWO_PI / arms) * arm;
+    let x = cos(angle + armAngle) * radius + random(-10, 10);
+    let y = sin(angle + armAngle) * radius + random(-10, 10);
+    let c = color(random(150, 255), random(150, 255), random(200, 255));
+    let s = random(1, 3);
+    stars.push({ x, y, size: s, c });
+  }
+}
