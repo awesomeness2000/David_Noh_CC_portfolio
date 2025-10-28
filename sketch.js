@@ -54,7 +54,7 @@ function drawGalaxy() {
   pop();
 
   rotation += 0.02;
-  growth += 1.8;
+  growth += 5;
   fade -= 1;
 
   if (fade <= 0) {

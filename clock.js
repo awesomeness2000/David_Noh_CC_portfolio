@@ -27,11 +27,11 @@ function draw() {
   textSize(40);
   for (let i = 1; i <= 12; i++) {
     let angle = i * 30;
-    let x = cos(angle) * 300;
-    let y = sin(angle) * 300;
     push();
+    rotate(angle);
+    translate(300, 0);
     rotate(90);
-    text(i, x, y);
+    text(i, 0, 0);
     pop();
   }
   pop();
@@ -42,7 +42,7 @@ function draw() {
 
   let secondAngle = map(sc, 0, 60, 0, 360);
   let minuteAngle = map(mn + sc / 60, 0, 60, 0, 360);
-  let hourAngle = map(hr + mn / 60, 0, 12, 0, 360);
+  let hourAngle = map(hr + mn / 60 + sc / 3600, 0, 12, 0, 360);
 
   push();
   rotate(hourAngle);
