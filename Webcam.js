@@ -1,25 +1,27 @@
 let cam;
 let exposureSlider, contrastSlider;
-let fliptf
+
+function preload(){
+  myFont = loadFont("Assets/font.otf")
+}
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  textFont('Verdana');
-  textStyle(BOLD);
-  textSize(20);
-
-  cam = createCapture(VIDEO, { flipped: true });
-  cam.size(windowWidth/4, windowHeight/4)
-  cam.hide();
   pixelDensity(1);
+  frameRate(30);
+
+  cam = createCapture(VIDEO);
+  cam.size(160, 120);
+  cam.hide();
 
   exposureSlider = createSlider(0, 255, 128);
-  exposureSlider.position(10, 450);
-  exposureSlider.size(600);
+  exposureSlider.size(400);
+  exposureSlider.position(100, windowHeight - 80);
 
   contrastSlider = createSlider(0, 255, 128);
-  contrastSlider.position(10, 550);
-  contrastSlider.size(600);
+  contrastSlider.size(400);
+  contrastSlider.position(100, windowHeight - 40);
 }
 
 function draw() {
@@ -28,47 +30,64 @@ function draw() {
   loadPixels();
 
   if (cam.pixels.length > 0) {
-    for (let y = 0; y < cam.height; y++) {
-      for (let x = 0; x < cam.width; x++) {
-        let index = (x + y * cam.width) * 4;
+    for (let y = 0; y < height; y++) {
+      let cy = floor(map(y, 0, height, 0, cam.height));
+      for (let x = 0; x < width; x++) {
+        let cx = floor(map(x, 0, width, 0, cam.width));
+        let ci = (cx + cy * cam.width) * 4;
 
-        let r = cam.pixels[index];
-        let g = cam.pixels[index + 1];
-        let b = cam.pixels[index + 2];
-        let brightness = (r + g + b) / 3;
+        let r = cam.pixels[ci];
+        let g = cam.pixels[ci + 1];
+        let b = cam.pixels[ci + 2];
+        let v = (r + g + b) / 3;
 
-        let exposure = exposureSlider.value();
-        
-        if (exposure < 128){
-          exposure = map(exposure, 128, 0, 0, -100);
+        let e = exposureSlider.value();
+        if (e < 128) {
+          e = map(e, 128, 0, 0, -80);
+        } else {
+          e = map(e, 128, 255, 0, 80);
         }
-        else{
-          exposure = map(exposure, 128, 255, 0, 100);
-        }
-        brightness += exposure;
+        v += e;
 
-        let contrast = contrastSlider.value();
-        let factor = map(contrast, 0, 255, 0, 3);
-        brightness = (brightness - 128) * factor + 128;
+        let c = contrastSlider.value();
+        let f = map(c, 0, 255, 0, 2);
+        v = (v - 128) * f + 128;
+        v = constrain(v, 0, 255);
 
-        if(brightness < 0){ 
-          brightness = 0;
-        }
-        else if (brightness > 255){
-          brightness = 255;
-        }
-
-        pixels[index] = brightness;
-        pixels[index + 1] = brightness;
-        pixels[index + 2] = brightness;
-        pixels[index + 3] = 255;
+        let di = (x + y * width) * 4;
+        pixels[di] = v;
+        pixels[di + 1] = v;
+        pixels[di + 2] = v;
+        pixels[di + 3] = 255;
       }
     }
     updatePixels();
   }
 
   fill(255);
-  text("Exposure", 20, 443);
-  text("Contrast", 20, 543);
+  textSize(20);
+  text("Exposure", 570, windowHeight - 68);
+  text("Contrast", 570, windowHeight - 28);
+
+ fill(75, 0, 255);
+  rect(20, 20, 120, 40, 10);
+  fill(255);
+  textFont(myFont);
+  textSize(18);
+  textAlign(CENTER, CENTER);
+  text("Home", 80, 40);
 }
 
+function mousePressed() {
+  if (mouseX > 20 && mouseX < 140) {
+    if (mouseY > 20 && mouseY < 60) {
+      window.location.href = "index.html";
+    }
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  exposureSlider.position(100, windowHeight - 80);
+  contrastSlider.position(100, windowHeight - 40);
+}

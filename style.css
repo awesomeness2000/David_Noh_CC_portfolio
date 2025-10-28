@@ -2,10 +2,55 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
 canvas {
   display: block;
 }
-  body {
-    background-color: black;
-    cursor: url('Assets/cursor.png') 8 8,  auto;
-  }
+
+body {
+  background-color: black;
+  cursor: url('Assets/cursor.png') 8 8, auto;
+}
+
+/* Fades in your buttons */
+#menu {
+  opacity: 0;
+  transition: opacity 2s ease;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* Correct @font-face block */
+@font-face {
+  font-family: 'MyFont';
+  src: url('Assets/font.otf') format('opentype'),
+       url('Assets/font.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Circular link buttons */
+.link {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 70px;
+  border-radius: 50%;
+  color: white;
+  background: #090a54;
+  text-decoration: none;
+  font-family: 'MyFont', sans-serif; /* fixed font name + missing semicolon */
+  font-size: 14px;
+  margin: 20px;
+  transition: all 0.3s ease;
+}
+
+/* Hover animation */
+.link:hover {
+  transform: scale(1.1);
+  background: #1518ad;
+}
