@@ -91,3 +91,6 @@ function windowResized() {
   exposureSlider.position(100, windowHeight - 80);
   contrastSlider.position(100, windowHeight - 40);
 }
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}

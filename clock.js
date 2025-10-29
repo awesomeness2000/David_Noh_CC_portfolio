@@ -84,3 +84,7 @@ function mousePressed() {
     window.location.href = "index.html";
   }
 }
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}

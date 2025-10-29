@@ -107,3 +107,6 @@ function generateGalaxy(arms, size) {
     stars.push({ x, y, size: s, c });
   }
 }
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}

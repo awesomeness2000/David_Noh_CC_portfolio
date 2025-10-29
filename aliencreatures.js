@@ -115,3 +115,7 @@ function mouseClicked(){
     foods.push(new Food(random(width), random(height)));
   }
 }
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
